@@ -1,0 +1,35 @@
+def defaults args
+  args.state.player_one ||= {x: 400, y: 300, dx: 0, dy: 0, w: 64, h: 64, path: 'sprites/player-one-cube.png', cooldown: 0, hits: 0}
+  args.state.player_one_fist_right ||= {x: 432, y: 300, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/player-one-fist.png', cooldown: 0}
+  args.state.player_one_fist_left ||= {x: 432, y: 332, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/player-one-fist.png', cooldown: 0}
+  args.state.cpu_one ||= {x: 800, y: 300, dx: 0, dy: 0, w: 64, h: 64, path: 'sprites/cpu-cube.png', cooldown: 0, hits: 0}
+  args.state.cpu_one_attack_zone ||= {x: 736, y: 236, dx: 0, dy: 0, w: 192, h: 192, path: 'sprites/cpu-cube-attack-warning.png', a: 0}
+  args.state.cpu_one_fist_right ||= {x: 800, y: 300, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/cpu-cube-fist.png', hit_cooldown: 0, cooldown: 0}
+  args.state.cpu_one_fist_left ||= {x: 800, y: 332, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/cpu-cube-fist.png', hit_cooldown: 0, cooldown: 0}
+  args.state.hit_effects ||= []
+  args.state.debug_enabled ||= false
+  args.state.time_seconds ||= 0
+  args.state.time_minutes ||= 0
+  args.state.time_frame ||= 0
+  args.state.match_timer ||= 20
+  args.state.cpu_one_move_timer ||= 0
+  args.state.cpu_one_move_direction ||= 0
+  args.state.cpu_one_attack_warning_timer ||= 0
+  args.state.cpu_one_attack_warning_timer_started ||= false
+  args.state.player_one_fist_right_timer||= 0
+  args.state.player_one_fist_right_timer_started ||= false
+  args.state.player_one_fist_right_forward ||= 0
+  args.state.player_one_fist_right_backward ||= 0
+  args.state.player_one_fist_left_timer ||= 0
+  args.state.player_one_fist_left_timer_started ||= false
+  args.state.player_one_fist_left_forward ||= 0
+  args.state.player_one_fist_left_backward ||= 0
+  args.state.cpu_one_fist_right_timer ||= 0
+  args.state.cpu_one_fist_right_timer_started ||= false
+  args.state.cpu_one_fist_right_forward ||= 0
+  args.state.cpu_one_fist_right_backward ||= 0
+  args.state.cpu_one_fist_left_timer ||= 0
+  args.state.cpu_one_fist_left_timer_started ||= false
+  args.state.cpu_one_fist_left_forward ||= 0
+  args.state.cpu_one_fist_left_backward ||= 0
+end

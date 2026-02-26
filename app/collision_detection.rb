@@ -21,6 +21,10 @@ def collision_detection args
     args.state.player_one.dx = 0
     args.state.player_one_fist_left.dx = 0
     args.state.player_one_fist_right.dx = 0
+    args.state.player_one_fist_right_backward = 0
+    args.state.player_one_fist_right_forward = 0
+    args.state.player_one_fist_left_backward = 0
+    args.state.player_one_fist_left_forward = 0
   end
 
   if args.state.cpu_one.intersect_rect? args.state.player_one
@@ -39,6 +43,10 @@ def collision_detection args
     args.state.cpu_one_fist_left.dx = 0
     args.state.cpu_one_fist_right.dx = 0
     args.state.cpu_one_attack_zone.dx = 0
+    args.state.cpu_one_fist_right_backward = 0
+    args.state.cpu_one_fist_right_forward = 0
+    args.state.cpu_one_fist_left_backward = 0
+    args.state.cpu_one_fist_left_forward = 0
   end
 
   args.state.player_one[:y] += args.state.player_one[:dy]

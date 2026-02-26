@@ -151,7 +151,7 @@ def player_one_input args
       end
     end
 
-    if args.state.player_one_fist_right_timer > 5 && args.state.player_one_fist_right_timer<= 10
+    if args.state.player_one_fist_right_timer > 5 && args.state.player_one_fist_right_timer <= 10
       args.state.player_one_fist_right[:dx] -= 5
       args.state.player_one_fist_right_backward -= 5
     end
@@ -161,6 +161,7 @@ def player_one_input args
       args.state.player_one_fist_right_backward = 0
       args.state.player_one_fist_right_timer_started = false
       args.state.player_one_fist_right_timer = 0
+      args.state.player_one_fist_right[:x] = args.state.player_one[:x] + 32
     end
   end
 
@@ -192,6 +193,7 @@ def player_one_input args
       args.state.player_one_fist_left_backward = 0
       args.state.player_one_fist_left_timer_started = false
       args.state.player_one_fist_left_timer = 0
+      args.state.player_one_fist_left[:x] = args.state.player_one[:x] + 32
     end
   end
 end

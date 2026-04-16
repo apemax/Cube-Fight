@@ -36,9 +36,9 @@ def tick args
 end
 
 def tick_menu_scene args
-  args.state.menu_option_player_vs_cpu ||= {x: 180, y: 500, w: 256, h: 64}
-  args.state.menu_option_how_to_play ||= {x: 180, y: 400, w: 256, h: 64}
-  args.state.menu_option_exit ||= {x: 180, y: 300, w: 256, h: 64}
+  args.state.menu_option_player_vs_cpu ||= {x: 180, y: 416, w: 384, h: 64}
+  args.state.menu_option_how_to_play ||= {x: 180, y: 316, w: 384, h: 64}
+  args.state.menu_option_exit ||= {x: 180, y: 216, w: 384, h: 64}
   args.state.menu_option_outline ||= [x: 1300, y: 800, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
   args.state.menu_option ||= 1
   args.state.menu_option_cooldown ||= 0
@@ -56,6 +56,16 @@ def tick_menu_scene args
     args.state.menu_option_cooldown -= 1
   end
 
+  if args.inputs.mouse.intersect_rect?(args.state.menu_option_player_vs_cpu)
+    args.state.menu_option = 1
+  end
+  if args.inputs.mouse.intersect_rect?(args.state.menu_option_how_to_play)
+    args.state.menu_option = 2
+  end
+  if args.inputs.mouse.intersect_rect?(args.state.menu_option_exit)
+    args.state.menu_option = 3
+  end
+
   args.outputs.labels << [x: 10, y: 80, text: "menu_option: #{(args.state.menu_option)}", size_enum: 3, a: 255, r: 0, g: 0, b: 0]
 
   args.outputs.background_color = [255, 255, 255]
@@ -67,26 +77,30 @@ def tick_menu_scene args
 
   if args.state.menu_option == 1
     args.state.menu_option_outline = [x: 180, y: 416, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter
+    if args.inputs.keyboard.enter or args.inputs.mouse.click
       args.state.next_scene = :game_scene
       args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
     end
   end
   if args.state.menu_option == 2
     args.state.menu_option_outline = [x: 180, y: 316, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter
+    if args.inputs.keyboard.enter or args.inputs.mouse.click
       args.state.next_scene = :how_to_play_scene
     end
   end
   if args.state.menu_option == 3
     args.state.menu_option_outline = [x: 180, y: 216, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter
+    if args.inputs.keyboard.enter or args.inputs.mouse.click
       GTK.request_quit
     end
   end
 end
 
 def tick_how_to_play_scene args
+  args.state.back_to_menu_button ||= {x: 430, y: 46, w: 384, h: 64}
+  args.state.back_to_menu_button_outline ||= [x: 1300, y: 800, w: 384, h: 64, path: 'sprites/menu-option-outline.png']
+
+  args.outputs.background_color = [255, 255, 255]
   args.outputs.labels << {x: 180, y: 620, text: "20 Second Cube Fight", size_enum: 40, a: 255, r: 0, g: 0, b: 0}
   args.outputs.labels << {x: 520, y: 500, text: "Controls:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   args.outputs.labels << {x: 150, y: 450, text: "w, s, a, d or arrow keys = Move up, down, left, right.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
@@ -94,10 +108,18 @@ def tick_how_to_play_scene args
   args.outputs.labels << {x: 200, y: 350, text: "space = Dodge in the direction you are moving.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   args.outputs.labels << {x: 450, y: 250, text: "Hit your opponent.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   args.outputs.labels << {x: 450, y: 200, text: "Avoid getting hit.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 200, y: 100, text: "Hit the Escape key to go back to the main menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 450, y: 100, text: "Back to main menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.primitives << args.state.back_to_menu_button_outline
 
   if args.inputs.keyboard.escape
     args.state.next_scene = :menu_scene
+  end
+
+  if args.inputs.mouse.intersect_rect?(args.state.back_to_menu_button)
+    args.state.back_to_menu_button_outline = [x: 430, y: 46, w: 384, h: 64, path: 'sprites/menu-option-outline.png']
+    if args.inputs.keyboard.enter or args.inputs.mouse.click
+      args.state.next_scene = :menu_scene
+    end
   end
 end
 

@@ -66,8 +66,6 @@ def tick_menu_scene args
     args.state.menu_option = 3
   end
 
-  args.outputs.labels << [x: 10, y: 80, text: "menu_option: #{(args.state.menu_option)}", size_enum: 3, a: 255, r: 0, g: 0, b: 0]
-
   args.outputs.background_color = [255, 255, 255]
   args.outputs.labels << {x: 180, y: 620, text: "20 Second Cube Fight", size_enum: 40, a: 255, r: 0, g: 0, b: 0}
   args.outputs.labels << {x: 180, y: 480, text: "Player VS CPU", size_enum: 20, a: 255, r: 0, g: 0, b: 0}
@@ -204,70 +202,166 @@ def tick_game_scene args
 end
 
 def tick_game_over_scene args
+  args.state.back_to_menu_button ||= {x: 500, y: 96, w: 384, h: 64}
+  args.state.play_again_button ||= {x: 180, y: 96, w: 384, h: 64}
+  args.state.back_to_menu_button_outline ||= [x: 1300, y: 800, w: 384, h: 64, path: 'sprites/menu-option-outline.png']
+  args.state.menu_option ||= 1
+  args.state.menu_option_cooldown ||= 0
+
+  if args.inputs.up and args.state.menu_option_cooldown <= 0 and args.state.menu_option >= 2
+    args.state.menu_option_cooldown += 10
+    args.state.menu_option -= 1
+  end
+  if args.inputs.down and args.state.menu_option_cooldown <= 0 and args.state.menu_option <= 2
+    args.state.menu_option_cooldown += 10
+    args.state.menu_option += 1
+  end
+
+  if args.state.menu_option_cooldown > 0
+    args.state.menu_option_cooldown -= 1
+  end
+
+  if args.inputs.mouse.intersect_rect?(args.state.play_again_button)
+    args.state.menu_option = 1
+  end
+  if args.inputs.mouse.intersect_rect?(args.state.back_to_menu_button)
+    args.state.menu_option = 2
+  end
+
   args.outputs.background_color = [255, 255, 255]
   args.outputs.labels << {x: 550, y: 600, text: "Times up!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   args.outputs.labels << {x: 350, y: 500, text: "Successful hits on opponent: #{(args.state.cpu_one[:hits])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   args.outputs.labels << {x: 520, y: 400, text: "Hits taken: #{(args.state.player_one[:hits])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 350, y: 200, text: "Press the Enter key to try again.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  if args.inputs.keyboard.enter
-    args.state.next_scene = :game_scene
-    args.state.player_one[:x] = 400
-    args.state.player_one[:y] = 300
-    args.state.player_one[:dx] = 0
-    args.state.player_one[:dy] = 0
-    args.state.player_one[:cooldown] = 0
-    args.state.player_one[:hits] = 0
-    args.state.cpu_one[:x] = 800
-    args.state.cpu_one[:y] = 300
-    args.state.cpu_one[:dx] = 0
-    args.state.cpu_one[:dy] = 0
-    args.state.cpu_one[:hits] = 0
-    args.state.cpu_one_attack_zone[:x] = 736
-    args.state.cpu_one_attack_zone[:y] = 236
-    args.state.cpu_one_attack_zone[:dx] = 0
-    args.state.cpu_one_attack_zone[:dy] = 0
-    args.state.time_seconds = 0
-    args.state.time_minutes = 0
-    args.state.time_frame = 0
-    args.state.match_timer = 20
-    args.state.cpu_one_move_timer = 0
-    args.state.cpu_one_move_direction = 0
-    args.state.player_one_fist_right[:x] = 432
-    args.state.player_one_fist_right[:y] = 300
-    args.state.player_one_fist_right[:dx] = 0
-    args.state.player_one_fist_right[:dy] = 0
-    args.state.player_one_fist_left[:x] = 432
-    args.state.player_one_fist_left[:y] = 332
-    args.state.player_one_fist_left[:dx] = 0
-    args.state.player_one_fist_left[:dy] = 0
-    args.state.cpu_one_fist_right[:x] = 800
-    args.state.cpu_one_fist_right[:y] = 300
-    args.state.cpu_one_fist_right[:dx] = 0
-    args.state.cpu_one_fist_right[:dy] = 0
-    args.state.cpu_one_fist_right[:hit_cooldown] = 0
-    args.state.cpu_one_fist_right[:cooldown] = 0
-    args.state.cpu_one_fist_left[:x] = 800
-    args.state.cpu_one_fist_left[:y] = 332
-    args.state.cpu_one_fist_left[:dx] = 0
-    args.state.cpu_one_fist_left[:dy] = 0
-    args.state.cpu_one_fist_left[:hit_cooldown] = 0
-    args.state.cpu_one_fist_left[:cooldown] = 0
-    args.state.player_one_fist_right_timer= 0
-    args.state.player_one_fist_right_timer_started = false
-    args.state.player_one_fist_right_forward = 0
-    args.state.player_one_fist_right_backward = 0
-    args.state.player_one_fist_left_timer = 0
-    args.state.player_one_fist_left_timer_started = false
-    args.state.player_one_fist_left_forward = 0
-    args.state.player_one_fist_left_backward = 0
-    args.state.cpu_one_fist_right_timer = 0
-    args.state.cpu_one_fist_right_timer_started = false
-    args.state.cpu_one_fist_right_forward = 0
-    args.state.cpu_one_fist_right_backward = 0
-    args.state.cpu_one_fist_left_timer = 0
-    args.state.cpu_one_fist_left_timer_started = false
-    args.state.cpu_one_fist_left_forward = 0
-    args.state.cpu_one_fist_left_backward = 0
+  args.outputs.labels << {x: 180, y: 150, text: "Play again.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 500, y: 150, text: "Main Menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.primitives << args.state.back_to_menu_button_outline
+
+  if args.state.menu_option == 1
+    args.state.back_to_menu_button_outline = [x: 160, y: 96, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
+    if args.inputs.keyboard.enter or args.inputs.mouse.click
+      args.state.next_scene = :game_scene
+      args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
+      args.state.player_one[:x] = 400
+      args.state.player_one[:y] = 300
+      args.state.player_one[:dx] = 0
+      args.state.player_one[:dy] = 0
+      args.state.player_one[:cooldown] = 0
+      args.state.player_one[:hits] = 0
+      args.state.cpu_one[:x] = 800
+      args.state.cpu_one[:y] = 300
+      args.state.cpu_one[:dx] = 0
+      args.state.cpu_one[:dy] = 0
+      args.state.cpu_one[:hits] = 0
+      args.state.cpu_one_attack_zone[:x] = 736
+      args.state.cpu_one_attack_zone[:y] = 236
+      args.state.cpu_one_attack_zone[:dx] = 0
+      args.state.cpu_one_attack_zone[:dy] = 0
+      args.state.time_seconds = 0
+      args.state.time_minutes = 0
+      args.state.time_frame = 0
+      args.state.match_timer = 20
+      args.state.cpu_one_move_timer = 0
+      args.state.cpu_one_move_direction = 0
+      args.state.player_one_fist_right[:x] = 432
+      args.state.player_one_fist_right[:y] = 300
+      args.state.player_one_fist_right[:dx] = 0
+      args.state.player_one_fist_right[:dy] = 0
+      args.state.player_one_fist_left[:x] = 432
+      args.state.player_one_fist_left[:y] = 332
+      args.state.player_one_fist_left[:dx] = 0
+      args.state.player_one_fist_left[:dy] = 0
+      args.state.cpu_one_fist_right[:x] = 800
+      args.state.cpu_one_fist_right[:y] = 300
+      args.state.cpu_one_fist_right[:dx] = 0
+      args.state.cpu_one_fist_right[:dy] = 0
+      args.state.cpu_one_fist_right[:hit_cooldown] = 0
+      args.state.cpu_one_fist_right[:cooldown] = 0
+      args.state.cpu_one_fist_left[:x] = 800
+      args.state.cpu_one_fist_left[:y] = 332
+      args.state.cpu_one_fist_left[:dx] = 0
+      args.state.cpu_one_fist_left[:dy] = 0
+      args.state.cpu_one_fist_left[:hit_cooldown] = 0
+      args.state.cpu_one_fist_left[:cooldown] = 0
+      args.state.player_one_fist_right_timer= 0
+      args.state.player_one_fist_right_timer_started = false
+      args.state.player_one_fist_right_forward = 0
+      args.state.player_one_fist_right_backward = 0
+      args.state.player_one_fist_left_timer = 0
+      args.state.player_one_fist_left_timer_started = false
+      args.state.player_one_fist_left_forward = 0
+      args.state.player_one_fist_left_backward = 0
+      args.state.cpu_one_fist_right_timer = 0
+      args.state.cpu_one_fist_right_timer_started = false
+      args.state.cpu_one_fist_right_forward = 0
+      args.state.cpu_one_fist_right_backward = 0
+      args.state.cpu_one_fist_left_timer = 0
+      args.state.cpu_one_fist_left_timer_started = false
+      args.state.cpu_one_fist_left_forward = 0
+      args.state.cpu_one_fist_left_backward = 0
+    end
+  end
+  if args.state.menu_option == 2
+    args.state.back_to_menu_button_outline = [x: 480, y: 96, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
+    if args.inputs.keyboard.enter or args.inputs.mouse.click
+      args.state.next_scene = :menu_scene
+      args.state.player_one[:x] = 400
+      args.state.player_one[:y] = 300
+      args.state.player_one[:dx] = 0
+      args.state.player_one[:dy] = 0
+      args.state.player_one[:cooldown] = 0
+      args.state.player_one[:hits] = 0
+      args.state.cpu_one[:x] = 800
+      args.state.cpu_one[:y] = 300
+      args.state.cpu_one[:dx] = 0
+      args.state.cpu_one[:dy] = 0
+      args.state.cpu_one[:hits] = 0
+      args.state.cpu_one_attack_zone[:x] = 736
+      args.state.cpu_one_attack_zone[:y] = 236
+      args.state.cpu_one_attack_zone[:dx] = 0
+      args.state.cpu_one_attack_zone[:dy] = 0
+      args.state.time_seconds = 0
+      args.state.time_minutes = 0
+      args.state.time_frame = 0
+      args.state.match_timer = 20
+      args.state.cpu_one_move_timer = 0
+      args.state.cpu_one_move_direction = 0
+      args.state.player_one_fist_right[:x] = 432
+      args.state.player_one_fist_right[:y] = 300
+      args.state.player_one_fist_right[:dx] = 0
+      args.state.player_one_fist_right[:dy] = 0
+      args.state.player_one_fist_left[:x] = 432
+      args.state.player_one_fist_left[:y] = 332
+      args.state.player_one_fist_left[:dx] = 0
+      args.state.player_one_fist_left[:dy] = 0
+      args.state.cpu_one_fist_right[:x] = 800
+      args.state.cpu_one_fist_right[:y] = 300
+      args.state.cpu_one_fist_right[:dx] = 0
+      args.state.cpu_one_fist_right[:dy] = 0
+      args.state.cpu_one_fist_right[:hit_cooldown] = 0
+      args.state.cpu_one_fist_right[:cooldown] = 0
+      args.state.cpu_one_fist_left[:x] = 800
+      args.state.cpu_one_fist_left[:y] = 332
+      args.state.cpu_one_fist_left[:dx] = 0
+      args.state.cpu_one_fist_left[:dy] = 0
+      args.state.cpu_one_fist_left[:hit_cooldown] = 0
+      args.state.cpu_one_fist_left[:cooldown] = 0
+      args.state.player_one_fist_right_timer= 0
+      args.state.player_one_fist_right_timer_started = false
+      args.state.player_one_fist_right_forward = 0
+      args.state.player_one_fist_right_backward = 0
+      args.state.player_one_fist_left_timer = 0
+      args.state.player_one_fist_left_timer_started = false
+      args.state.player_one_fist_left_forward = 0
+      args.state.player_one_fist_left_backward = 0
+      args.state.cpu_one_fist_right_timer = 0
+      args.state.cpu_one_fist_right_timer_started = false
+      args.state.cpu_one_fist_right_forward = 0
+      args.state.cpu_one_fist_right_backward = 0
+      args.state.cpu_one_fist_left_timer = 0
+      args.state.cpu_one_fist_left_timer_started = false
+      args.state.cpu_one_fist_left_forward = 0
+      args.state.cpu_one_fist_left_backward = 0
+    end
   end
 end
 

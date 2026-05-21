@@ -188,15 +188,26 @@ def tick_game_scene args
   args.outputs.background_color = [255, 255, 255]
   args.outputs.primitives << args.state.cpu_one_attack_zone
   args.outputs.primitives << args.state.player_one
+  args.outputs.primitives << args.state.player_one_health_bar
   args.outputs.primitives << args.state.cpu_one
+  args.outputs.primitives << args.state.cpu_one_health_bar
   args.outputs.primitives << args.state.player_one_fist_right
   args.outputs.primitives << args.state.player_one_fist_left
   args.outputs.primitives << args.state.cpu_one_fist_left
   args.outputs.primitives << args.state.cpu_one_fist_right
   args.outputs.primitives << args.state.hit_effects
-  args.outputs.labels << {x: 550, y: 700, text: "Time: #{(args.state.match_timer)}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.primitives << args.state.health_bar_outline_right
+  args.outputs.primitives << args.state.health_bar_outline_left
+  args.outputs.labels << {x: 50, y: 660, text: "Player One", size_enum: 5, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 1050, y: 660, text: "CPU One", size_enum: 5, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 560, y: 700, text: "Time: #{(args.state.match_timer)}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
 
   if args.state.match_timer <= 0
+    args.state.match_time_out = true
+    args.state.next_scene = :game_over_scene
+  end
+  if args.state.player_one[:health] <= 0 or args.state.cpu_one[:health] <= 0
+    args.state.match_ko = true
     args.state.next_scene = :game_over_scene
   end
 end
@@ -229,11 +240,56 @@ def tick_game_over_scene args
   end
 
   args.outputs.background_color = [255, 255, 255]
-  args.outputs.labels << {x: 550, y: 600, text: "Times up!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 350, y: 500, text: "Successful hits on opponent: #{(args.state.cpu_one[:hits])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 520, y: 400, text: "Hits taken: #{(args.state.player_one[:hits])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 180, y: 150, text: "Play again.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 500, y: 150, text: "Main Menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+
+
+  if args.state.match_time_out == true
+    args.outputs.labels << {x: 550, y: 600, text: "Times up!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 510, y: 500, text: "Player VS CPU", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 250, y: 450, text: "Hits taken:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 550, y: 450, text: "#{(args.state.player_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 710, y: 450, text: "#{(args.state.cpu_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 231, y: 400, text: "Health left:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 550, y: 400, text: "#{(args.state.player_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 710, y: 400, text: "#{(args.state.cpu_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+
+    if args.state.cpu_one[:health] < args.state.player_one[:health]
+      args.outputs.labels << {x: 500, y: 300, text: "Player Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+    if args.state.player_one[:health] < args.state.cpu_one[:health]
+      args.outputs.labels << {x: 540, y: 300, text: "CPU Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+    if args.state.cpu_one[:health] == args.state.player_one[:health]
+      args.outputs.labels << {x: 500, y: 300, text: "Tie!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+
+    args.outputs.labels << {x: 180, y: 150, text: "Play again.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 500, y: 150, text: "Main Menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  end
+
+  if args.state.match_ko == true
+    args.outputs.labels << {x: 600, y: 600, text: "KO!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 510, y: 500, text: "Player VS CPU", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 250, y: 450, text: "Hits taken:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 550, y: 450, text: "#{(args.state.player_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 710, y: 450, text: "#{(args.state.cpu_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 231, y: 400, text: "Health left:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 550, y: 400, text: "#{(args.state.player_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 710, y: 400, text: "#{(args.state.cpu_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+
+    if args.state.cpu_one[:health] <= 0
+      args.outputs.labels << {x: 500, y: 300, text: "Player Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+    if args.state.player_one[:health] <= 0
+      args.outputs.labels << {x: 540, y: 300, text: "CPU Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+    if args.state.cpu_one[:health] == args.state.player_one[:health]
+      args.outputs.labels << {x: 500, y: 300, text: "Tie!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+
+    args.outputs.labels << {x: 180, y: 150, text: "Play again.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 500, y: 150, text: "Main Menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  end
+
   args.outputs.primitives << args.state.back_to_menu_button_outline
 
   if args.state.menu_option == 1
@@ -246,12 +302,17 @@ def tick_game_over_scene args
       args.state.player_one[:dx] = 0
       args.state.player_one[:dy] = 0
       args.state.player_one[:cooldown] = 0
-      args.state.player_one[:hits] = 0
+      args.state.player_one[:hits_taken] = 0
+      args.state.player_one[:health] = 100
+      args.state.player_one_health_bar[:w] = 500
       args.state.cpu_one[:x] = 800
       args.state.cpu_one[:y] = 300
       args.state.cpu_one[:dx] = 0
       args.state.cpu_one[:dy] = 0
-      args.state.cpu_one[:hits] = 0
+      args.state.cpu_one[:hits_taken] = 0
+      args.state.cpu_one[:health] = 100
+      args.state.cpu_one_health_bar[:w] = 500
+      args.state.cpu_one_health_bar[:x] = 750
       args.state.cpu_one_attack_zone[:x] = 736
       args.state.cpu_one_attack_zone[:y] = 236
       args.state.cpu_one_attack_zone[:dx] = 0
@@ -260,6 +321,8 @@ def tick_game_over_scene args
       args.state.time_minutes = 0
       args.state.time_frame = 0
       args.state.match_timer = 20
+      args.state.match_time_out = false
+      args.state.match_ko = false
       args.state.cpu_one_move_timer = 0
       args.state.cpu_one_move_direction = 0
       args.state.player_one_fist_right[:x] = 432
@@ -309,12 +372,14 @@ def tick_game_over_scene args
       args.state.player_one[:dx] = 0
       args.state.player_one[:dy] = 0
       args.state.player_one[:cooldown] = 0
-      args.state.player_one[:hits] = 0
+      args.state.player_one[:hits_taken] = 0
+      args.state.player_one[:health] = 100
       args.state.cpu_one[:x] = 800
       args.state.cpu_one[:y] = 300
       args.state.cpu_one[:dx] = 0
       args.state.cpu_one[:dy] = 0
-      args.state.cpu_one[:hits] = 0
+      args.state.cpu_one[:hits_taken] = 0
+      args.state.cpu_one[:health] = 100
       args.state.cpu_one_attack_zone[:x] = 736
       args.state.cpu_one_attack_zone[:y] = 236
       args.state.cpu_one_attack_zone[:dx] = 0
@@ -323,6 +388,8 @@ def tick_game_over_scene args
       args.state.time_minutes = 0
       args.state.time_frame = 0
       args.state.match_timer = 20
+      args.state.match_time_out = false
+      args.state.match_ko = false
       args.state.cpu_one_move_timer = 0
       args.state.cpu_one_move_direction = 0
       args.state.player_one_fist_right[:x] = 432

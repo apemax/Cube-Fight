@@ -137,7 +137,9 @@ def cpu_one_input args
       args.state.cpu_one_fist_right[:dx] -= args.state.cpu_one_fist_right_forward
       args.state.cpu_one_fist_right_forward = 0
       if args.state.player_one.intersect_rect? args.state.cpu_one_fist_right and args.state.cpu_one_fist_right[:hit_cooldown] <= 0 and !args.state.player_one.intersect_rect? args.state.cpu_one
-        args.state.player_one[:hits] += 1
+        args.state.player_one[:hits_taken] += 1
+        args.state.player_one[:health] -= 10
+        args.state.player_one_health_bar[:w] -= 50
         args.state.cpu_one_fist_right[:hit_cooldown] += 15
         args.state.hit_effects << {x: args.state.cpu_one_fist_right[:x] + 8, y: args.state.cpu_one_fist_right[:y] + 8, w: 32, h: 32, path: 'sprites/hit-effect-0.png', age: 0}
         args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: 0.2}
@@ -169,7 +171,9 @@ def cpu_one_input args
       args.state.cpu_one_fist_left[:dx] -= args.state.cpu_one_fist_left_forward
       args.state.cpu_one_fist_left_forward = 0
       if args.state.player_one.intersect_rect? args.state.cpu_one_fist_left and args.state.cpu_one_fist_left[:hit_cooldown] <= 0 and !args.state.player_one.intersect_rect? args.state.cpu_one
-        args.state.player_one[:hits] += 1
+        args.state.player_one[:hits_taken] += 1
+        args.state.player_one[:health] -= 10
+        args.state.player_one_health_bar[:w] -= 50
         args.state.cpu_one_fist_left[:hit_cooldown] += 15
         args.state.hit_effects << {x: args.state.cpu_one_fist_left[:x] + 8, y: args.state.cpu_one_fist_left[:y] + 8, w: 32, h: 32, path: 'sprites/hit-effect-0.png', age: 0}
         args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: 0.2}

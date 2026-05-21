@@ -1,17 +1,23 @@
 def defaults args
-  args.state.player_one ||= {x: 400, y: 300, dx: 0, dy: 0, w: 64, h: 64, path: 'sprites/player-one-cube.png', cooldown: 0, hits: 0}
+  args.state.player_one ||= {x: 400, y: 300, dx: 0, dy: 0, w: 64, h: 64, path: 'sprites/player-one-cube.png', cooldown: 0, hits_taken: 0, health: 100}
   args.state.player_one_fist_right ||= {x: 432, y: 300, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/player-one-fist.png', cooldown: 0}
   args.state.player_one_fist_left ||= {x: 432, y: 332, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/player-one-fist.png', cooldown: 0}
-  args.state.cpu_one ||= {x: 800, y: 300, dx: 0, dy: 0, w: 64, h: 64, path: 'sprites/cpu-cube.png', cooldown: 0, hits: 0}
+  args.state.player_one_health_bar ||= {x: 30, y: 668, w: 500, h: 32, path: 'sprites/health-bar.png'}
+  args.state.cpu_one ||= {x: 800, y: 300, dx: 0, dy: 0, w: 64, h: 64, path: 'sprites/cpu-cube.png', cooldown: 0, hits_taken: 0, health: 100}
   args.state.cpu_one_attack_zone ||= {x: 736, y: 236, dx: 0, dy: 0, w: 192, h: 192, path: 'sprites/cpu-cube-attack-warning.png', a: 0}
   args.state.cpu_one_fist_right ||= {x: 800, y: 300, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/cpu-cube-fist.png', hit_cooldown: 0, cooldown: 0}
   args.state.cpu_one_fist_left ||= {x: 800, y: 332, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/cpu-cube-fist.png', hit_cooldown: 0, cooldown: 0}
+  args.state.cpu_one_health_bar ||= {x: 750, y: 668, w: 500, h: 32, path: 'sprites/health-bar.png'}
+  args.state.health_bar_outline_left ||= {x: 30, y: 668, w: 500, h: 32, path: 'sprites/health-bar-outline.png'}
+  args.state.health_bar_outline_right ||= {x: 750, y: 668, w: 500, h: 32, path: 'sprites/health-bar-outline.png'}
   args.state.hit_effects ||= []
   args.state.debug_enabled ||= false
   args.state.time_seconds ||= 0
   args.state.time_minutes ||= 0
   args.state.time_frame ||= 0
   args.state.match_timer ||= 20
+  args.state.match_time_out ||= false
+  args.state.match_ko ||= false
   args.state.cpu_one_move_timer ||= 0
   args.state.cpu_one_move_direction ||= 0
   args.state.cpu_one_attack_warning_timer ||= 0

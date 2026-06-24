@@ -74,6 +74,7 @@ def reset_defaults args
   args.state.player_one_fist_left[:y] = 332
   args.state.player_one_fist_left[:dx] = 0
   args.state.player_one_fist_left[:dy] = 0
+  args.state.player_one_health_bar[:w] = 500
   args.state.cpu_one_fist_right[:x] = 800
   args.state.cpu_one_fist_right[:y] = 300
   args.state.cpu_one_fist_right[:dx] = 0
@@ -86,6 +87,8 @@ def reset_defaults args
   args.state.cpu_one_fist_left[:dy] = 0
   args.state.cpu_one_fist_left[:hit_cooldown] = 0
   args.state.cpu_one_fist_left[:cooldown] = 0
+  args.state.cpu_one_health_bar[:w] = 500
+  args.state.cpu_one_health_bar[:x] = 750
   args.state.player_one_fist_right_timer= 0
   args.state.player_one_fist_right_timer_started = false
   args.state.player_one_fist_right_forward = 0

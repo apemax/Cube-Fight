@@ -219,11 +219,11 @@ def tick_game_over_scene args
   args.state.menu_option ||= 1
   args.state.menu_option_cooldown ||= 0
 
-  if args.inputs.up and args.state.menu_option_cooldown <= 0 and args.state.menu_option >= 2
+  if args.inputs.left and args.state.menu_option_cooldown <= 0 and args.state.menu_option >= 2
     args.state.menu_option_cooldown += 10
     args.state.menu_option -= 1
   end
-  if args.inputs.down and args.state.menu_option_cooldown <= 0 and args.state.menu_option <= 2
+  if args.inputs.right and args.state.menu_option_cooldown <= 0 and args.state.menu_option <= 2
     args.state.menu_option_cooldown += 10
     args.state.menu_option += 1
   end

@@ -94,8 +94,9 @@ def tick_menu_scene args
   end
   if args.state.menu_option_main == 2
     args.state.menu_option_outline = [x: 180, y: 316, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click
+    if args.inputs.keyboard.enter or args.inputs.mouse.click and args.state.menu_option_click_cooldown <= 0
       args.state.next_scene = :how_to_play_scene
+      args.state.menu_option_click_cooldown += 10
     end
   end
   if args.state.menu_option_main == 3
@@ -117,6 +118,10 @@ def tick_how_to_play_scene args
   args.state.back_to_menu_button ||= {x: 430, y: 46, w: 384, h: 64}
   args.state.back_to_menu_button_outline ||= [x: 1300, y: 800, w: 384, h: 64, path: 'sprites/menu-option-outline.png']
 
+  if args.state.menu_option_click_cooldown > 0
+    args.state.menu_option_click_cooldown -= 1
+  end
+
   args.outputs.background_color = [255, 255, 255]
   args.outputs.labels << {x: 180, y: 620, text: "20 Second Cube Fight", size_enum: 40, a: 255, r: 0, g: 0, b: 0}
   args.outputs.labels << {x: 520, y: 500, text: "Controls:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
@@ -128,14 +133,16 @@ def tick_how_to_play_scene args
   args.outputs.labels << {x: 450, y: 100, text: "Back to main menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   args.outputs.primitives << args.state.back_to_menu_button_outline
 
-  if args.inputs.keyboard.escape
+  if args.inputs.keyboard.escape or args.inputs.keyboard.enter and args.state.menu_option_click_cooldown <= 0
     args.state.next_scene = :menu_scene
+    args.state.menu_option_click_cooldown += 10
   end
 
-  if args.inputs.mouse.intersect_rect?(args.state.back_to_menu_button)
+  if args.inputs.mouse.intersect_rect?(args.state.back_to_menu_button) and args.state.menu_option_click_cooldown <= 0
     args.state.back_to_menu_button_outline = [x: 430, y: 46, w: 384, h: 64, path: 'sprites/menu-option-outline.png']
     if args.inputs.keyboard.enter or args.inputs.mouse.click
       args.state.next_scene = :menu_scene
+      args.state.menu_option_click_cooldown += 10
     end
   end
 end

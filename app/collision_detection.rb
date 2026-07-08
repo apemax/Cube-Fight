@@ -1,4 +1,7 @@
 def collision_detection args
+
+  # Move player sprite
+
   args.state.player_one[:x] += args.state.player_one[:dx]
   args.state.player_one_fist_right[:x] += args.state.player_one_fist_right[:dx]
   args.state.player_one_fist_left[:x] += args.state.player_one_fist_left[:dx]
@@ -48,6 +51,8 @@ def collision_detection args
     args.state.cpu_one_fist_left_backward = 0
     args.state.cpu_one_fist_left_forward = 0
   end
+
+  # Move CPU sprite
 
   args.state.player_one[:y] += args.state.player_one[:dy]
   args.state.player_one_fist_right[:y] += args.state.player_one_fist_right[:dy]

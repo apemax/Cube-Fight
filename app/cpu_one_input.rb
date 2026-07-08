@@ -1,5 +1,6 @@
 def cpu_one_input args
   # cpu movement
+
   if args.state.cpu_one_move_timer > 0
     args.state.cpu_one_move_timer -= 1
   end
@@ -7,6 +8,8 @@ def cpu_one_input args
   if args.state.cpu_one_move_timer == 0
     args.state.cpu_one_move_direction = Numeric.rand(4)
   end
+
+  # Maintain constant movement speed
 
   if args.state.cpu_one[:dx] > 0.5
     args.state.cpu_one[:dx] -= 0.5
@@ -33,6 +36,8 @@ def cpu_one_input args
     args.state.cpu_one_fist_right[:dy] += 0.5
     args.state.cpu_one_fist_left[:dy] += 0.5
   end
+
+  # CPU movement input
 
   if args.state.cpu_one_move_direction == 0
     if args.state.cpu_one_move_timer == 0
@@ -68,6 +73,8 @@ def cpu_one_input args
     args.state.cpu_one_fist_left[:dy] -= 0.5
   end
 
+  # Stop CPU from exiting screen
+
   if args.state.cpu_one[:x] <= 425
     args.state.cpu_one[:x] = 425
     args.state.cpu_one_attack_zone[:x] = 425 - 64
@@ -93,7 +100,7 @@ def cpu_one_input args
     args.state.cpu_one_fist_left[:y] = 592 + 32
   end
 
-  # cpu attack
+  # Start CPU attack warning timer
 
   if args.state.cpu_one_attack_zone.intersect_rect? args.state.player_one
     args.state.cpu_one_attack_warning_timer_started = true
@@ -125,6 +132,8 @@ def cpu_one_input args
       end
     end
   end
+
+  # CPU fist right input and collision detection
 
   if args.state.cpu_one_fist_right_timer_started == true
     args.state.cpu_one_fist_right_timer += 1
@@ -159,6 +168,8 @@ def cpu_one_input args
       args.state.cpu_one_fist_right[:cooldown] += 60
     end
   end
+
+  # CPU fist left input and collision detection
 
   if args.state.cpu_one_fist_left_timer_started == true
     args.state.cpu_one_fist_left_timer += 1

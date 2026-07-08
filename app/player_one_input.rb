@@ -1,5 +1,7 @@
 def player_one_input args
-  # Movement input
+
+  # Dodge input
+
   if args.inputs.keyboard.key_down.space && args.state.player_one[:cooldown] <= 0
     if args.state.player_one[:dx] == -5
       args.state.player_one[:dx] -= 15
@@ -23,6 +25,8 @@ def player_one_input args
     args.state.player_one[:cooldown] += 15
   end
 
+  # Maintain constant movement speed
+
   if args.state.player_one[:dx] > 5
     args.state.player_one[:dx] -= 1
     args.state.player_one_fist_right[:dx] -= 1
@@ -44,6 +48,8 @@ def player_one_input args
     args.state.player_one_fist_right[:dy] += 1
     args.state.player_one_fist_left[:dy] += 1
   end
+
+  # Player input
 
   if args.inputs.key_held.left
     if args.state.player_one[:dx] == 0
@@ -102,6 +108,8 @@ def player_one_input args
     end
   end
 
+  # Stop player from exiting screen
+
   if args.state.player_one[:x] <= 0
     args.state.player_one[:x] = 0
     args.state.player_one_fist_right[:x] = 0 + 32
@@ -123,7 +131,7 @@ def player_one_input args
     args.state.player_one_fist_left[:y] = 656 + 32
   end
 
-  # Attack input
+  # Start player attack cooldown timers
 
   if args.inputs.keyboard.key_down.l && args.state.player_one[:cooldown] <= 0
     args.state.player_one_fist_right_timer_started = true
@@ -132,6 +140,8 @@ def player_one_input args
   if args.inputs.keyboard.key_down.k && args.state.player_one[:cooldown] <= 0
     args.state.player_one_fist_left_timer_started = true
   end
+
+  # Player fist right input and collision detection
 
   if args.state.player_one_fist_right_timer_started == true
     args.state.player_one_fist_right_timer += 1
@@ -167,6 +177,8 @@ def player_one_input args
       args.state.player_one_fist_right[:x] = args.state.player_one[:x] + 32
     end
   end
+
+  # Player fist left input and collision detection
 
   if args.state.player_one_fist_left_timer_started == true
     args.state.player_one_fist_left_timer += 1

@@ -87,28 +87,28 @@ def tick_menu_scene args
 
   if args.state.menu_option_main == 1
     args.state.menu_option_outline = [x: 180, y: 416, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
       args.state.next_scene = :game_scene
       args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
     end
   end
   if args.state.menu_option_main == 2
     args.state.menu_option_outline = [x: 180, y: 316, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click and args.state.menu_option_click_cooldown <= 0
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a and args.state.menu_option_click_cooldown <= 0
       args.state.next_scene = :how_to_play_scene
       args.state.menu_option_click_cooldown += 10
     end
   end
   if args.state.menu_option_main == 3
     args.state.menu_option_outline = [x: 180, y: 216, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click and args.state.menu_option_click_cooldown <= 0
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a and args.state.menu_option_click_cooldown <= 0
       args.state.next_scene = :options_scene
       args.state.menu_option_click_cooldown += 10
     end
   end
   if args.state.menu_option_main == 4
     args.state.menu_option_outline = [x: 180, y: 116, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
       GTK.request_quit
     end
   end
@@ -133,14 +133,14 @@ def tick_how_to_play_scene args
   args.outputs.labels << {x: 450, y: 100, text: "Back to main menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   args.outputs.primitives << args.state.back_to_menu_button_outline
 
-  if args.inputs.keyboard.escape or args.inputs.keyboard.enter and args.state.menu_option_click_cooldown <= 0
+  if args.inputs.keyboard.escape or args.inputs.keyboard.enter or args.inputs.controller_one.key_down.b and args.state.menu_option_click_cooldown <= 0
     args.state.next_scene = :menu_scene
     args.state.menu_option_click_cooldown += 10
   end
 
   if args.inputs.mouse.intersect_rect?(args.state.back_to_menu_button) and args.state.menu_option_click_cooldown <= 0
     args.state.back_to_menu_button_outline = [x: 430, y: 46, w: 384, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
       args.state.next_scene = :menu_scene
       args.state.menu_option_click_cooldown += 10
     end
@@ -180,7 +180,7 @@ def tick_options_scene args
 
   if args.state.menu_option == 1
     args.state.button_outline = [x: 160, y: 546, w: 390, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click and args.state.menu_option_click_cooldown <= 0
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a and args.state.menu_option_click_cooldown <= 0
       if args.state.cpu_attack_warning == true
         args.state.cpu_attack_warning = false
       elsif args.state.cpu_attack_warning == false
@@ -191,7 +191,7 @@ def tick_options_scene args
   end
   if args.state.menu_option == 2
     args.state.button_outline = [x: 160, y: 96, w: 220, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click and args.state.menu_option_click_cooldown <= 0
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a and args.state.menu_option_click_cooldown <= 0
       args.state.next_scene = :menu_scene
       args.state.menu_option_click_cooldown += 10
     end
@@ -313,7 +313,7 @@ def tick_game_over_scene args
     args.state.menu_option_cooldown += 10
     args.state.menu_option_game_over -= 1
   end
-  if args.inputs.right and args.state.menu_option_cooldown <= 0 and args.state.menu_option_game_over <= 2
+  if args.inputs.right and args.state.menu_option_cooldown <= 0 and args.state.menu_option_game_over <= 1
     args.state.menu_option_cooldown += 10
     args.state.menu_option_game_over += 1
   end
@@ -384,7 +384,7 @@ def tick_game_over_scene args
 
   if args.state.menu_option_game_over == 1
     args.state.back_to_menu_button_outline = [x: 160, y: 96, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
       args.state.next_scene = :game_scene
       args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
       reset_defaults args
@@ -392,7 +392,7 @@ def tick_game_over_scene args
   end
   if args.state.menu_option_game_over == 2
     args.state.back_to_menu_button_outline = [x: 480, y: 96, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
       args.state.next_scene = :menu_scene
       reset_defaults args
     end

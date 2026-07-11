@@ -2,7 +2,7 @@ def player_one_input args
 
   # Dodge input
 
-  if args.inputs.keyboard.key_down.space && args.state.player_one[:cooldown] <= 0
+  if args.inputs.keyboard.key_down.space or args.inputs.controller_one.key_down.l1 && args.state.player_one[:cooldown] <= 0
     if args.state.player_one[:dx] == -5
       args.state.player_one[:dx] -= 15
       args.state.player_one_fist_right[:dx] -= 15
@@ -133,11 +133,11 @@ def player_one_input args
 
   # Start player attack cooldown timers
 
-  if args.inputs.keyboard.key_down.l && args.state.player_one[:cooldown] <= 0
+  if args.inputs.keyboard.key_down.l or args.inputs.controller_one.key_down.x && args.state.player_one[:cooldown] <= 0
     args.state.player_one_fist_right_timer_started = true
   end
 
-  if args.inputs.keyboard.key_down.k && args.state.player_one[:cooldown] <= 0
+  if args.inputs.keyboard.key_down.k or args.inputs.controller_one.key_down.y && args.state.player_one[:cooldown] <= 0
     args.state.player_one_fist_left_timer_started = true
   end
 

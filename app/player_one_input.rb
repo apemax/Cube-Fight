@@ -51,56 +51,56 @@ def player_one_input args
 
   # Player input
 
-  if args.inputs.key_held.left
+  if args.inputs.keyboard.key_held.a or args.inputs.controller_one.left
     if args.state.player_one[:dx] == 0
       args.state.player_one[:dx] -= 5
       args.state.player_one_fist_right[:dx] -= 5
       args.state.player_one_fist_left[:dx] -= 5
     end
   end
-  if !args.inputs.key_held.left
+  if !args.inputs.keyboard.key_held.a or args.inputs.controller_one.left
     if args.state.player_one[:dx] == -5
       args.state.player_one[:dx] += 5
       args.state.player_one_fist_right[:dx] += 5
       args.state.player_one_fist_left[:dx] += 5
     end
   end
-  if args.inputs.key_held.right
+  if args.inputs.keyboard.key_held.d or args.inputs.controller_one.right
     if args.state.player_one[:dx] == 0
       args.state.player_one[:dx] += 5
       args.state.player_one_fist_right[:dx] += 5
       args.state.player_one_fist_left[:dx] += 5
     end
   end
-  if !args.inputs.key_held.right
+  if !args.inputs.keyboard.key_held.d or args.inputs.controller_one.right
     if args.state.player_one[:dx] == 5
       args.state.player_one[:dx] -= 5
       args.state.player_one_fist_right[:dx] -= 5
       args.state.player_one_fist_left[:dx] -= 5
     end
   end
-  if args.inputs.key_held.up
+  if args.inputs.keyboard.key_held.w or args.inputs.controller_one.up
     if args.state.player_one[:dy] == 0
       args.state.player_one[:dy] += 5
       args.state.player_one_fist_right[:dy] += 5
       args.state.player_one_fist_left[:dy] += 5
     end
   end
-  if !args.inputs.key_held.up
+  if !args.inputs.keyboard.key_held.w or args.inputs.controller_one.up
     if args.state.player_one[:dy] == 5
       args.state.player_one[:dy] -= 5
       args.state.player_one_fist_right[:dy] -= 5
       args.state.player_one_fist_left[:dy] -= 5
     end
   end
-  if args.inputs.key_held.down
+  if args.inputs.keyboard.key_held.s or args.inputs.controller_one.down
     if args.state.player_one[:dy] == 0
       args.state.player_one[:dy] -= 5
       args.state.player_one_fist_right[:dy] -= 5
       args.state.player_one_fist_left[:dy] -= 5
     end
   end
-  if !args.inputs.key_held.down
+  if !args.inputs.keyboard.key_held.s or args.inputs.controller_one.down
     if args.state.player_one[:dy] == -5
       args.state.player_one[:dy] += 5
       args.state.player_one_fist_right[:dy] += 5

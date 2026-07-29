@@ -1,13 +1,56 @@
 def defaults args
+  # Player one
+
   args.state.player_one ||= {x: 400, y: 300, dx: 0, dy: 0, w: 64, h: 64, path: 'sprites/player-one-cube.png', cooldown: 0, hits_taken: 0, health: 100}
   args.state.player_one_fist_right ||= {x: 432, y: 300, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/player-one-fist.png', cooldown: 0}
   args.state.player_one_fist_left ||= {x: 432, y: 332, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/player-one-fist.png', cooldown: 0}
   args.state.player_one_health_bar ||= {x: 30, y: 668, w: 500, h: 32, path: 'sprites/health-bar.png'}
+  args.state.player_one_fist_right_timer||= 0
+  args.state.player_one_fist_right_timer_started ||= false
+  args.state.player_one_fist_right_forward ||= 0
+  args.state.player_one_fist_right_backward ||= 0
+  args.state.player_one_fist_left_timer ||= 0
+  args.state.player_one_fist_left_timer_started ||= false
+  args.state.player_one_fist_left_forward ||= 0
+  args.state.player_one_fist_left_backward ||= 0
+
+  # Player two
+
+  args.state.player_two ||= {x: 800, y: 300, dx: 0, dy: 0, w: 64, h: 64, path: 'sprites/player-one-cube.png', cooldown: 0, hits_taken: 0, health: 100}
+  args.state.player_two_fist_right ||= {x: 800, y: 300, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/player-one-fist.png', cooldown: 0}
+  args.state.player_two_fist_left ||= {x: 800, y: 332, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/player-one-fist.png', cooldown: 0}
+  args.state.player_two_health_bar ||= {x: 750, y: 668, w: 500, h: 32, path: 'sprites/health-bar.png'}
+  args.state.player_two_fist_right_timer||= 0
+  args.state.player_two_fist_right_timer_started ||= false
+  args.state.player_two_fist_right_forward ||= 0
+  args.state.player_two_fist_right_backward ||= 0
+  args.state.player_two_fist_left_timer ||= 0
+  args.state.player_two_fist_left_timer_started ||= false
+  args.state.player_two_fist_left_forward ||= 0
+  args.state.player_two_fist_left_backward ||= 0
+
+  # CPU one
+
   args.state.cpu_one ||= {x: 800, y: 300, dx: 0, dy: 0, w: 64, h: 64, path: 'sprites/cpu-cube.png', cooldown: 0, hits_taken: 0, health: 100}
   args.state.cpu_one_attack_zone ||= {x: 736, y: 236, dx: 0, dy: 0, w: 192, h: 192, path: 'sprites/cpu-cube-attack-warning.png', a: 0}
   args.state.cpu_one_fist_right ||= {x: 800, y: 300, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/cpu-cube-fist.png', hit_cooldown: 0, cooldown: 0}
   args.state.cpu_one_fist_left ||= {x: 800, y: 332, dx: 0, dy: 0, w: 32, h: 16, path: 'sprites/cpu-cube-fist.png', hit_cooldown: 0, cooldown: 0}
   args.state.cpu_one_health_bar ||= {x: 750, y: 668, w: 500, h: 32, path: 'sprites/health-bar.png'}
+  args.state.cpu_one_fist_right_timer ||= 0
+  args.state.cpu_one_fist_right_timer_started ||= false
+  args.state.cpu_one_fist_right_forward ||= 0
+  args.state.cpu_one_fist_right_backward ||= 0
+  args.state.cpu_one_fist_left_timer ||= 0
+  args.state.cpu_one_fist_left_timer_started ||= false
+  args.state.cpu_one_fist_left_forward ||= 0
+  args.state.cpu_one_fist_left_backward ||= 0
+  args.state.cpu_one_move_timer ||= 0
+  args.state.cpu_one_move_direction ||= 0
+  args.state.cpu_one_attack_warning_timer ||= 0
+  args.state.cpu_one_attack_warning_timer_started ||= false
+
+  # Other variables
+
   args.state.health_bar_outline_left ||= {x: 30, y: 668, w: 500, h: 32, path: 'sprites/health-bar-outline.png'}
   args.state.health_bar_outline_right ||= {x: 750, y: 668, w: 500, h: 32, path: 'sprites/health-bar-outline.png'}
   args.state.hit_effects ||= []
@@ -18,29 +61,14 @@ def defaults args
   args.state.match_timer ||= 20
   args.state.match_time_out ||= false
   args.state.match_ko ||= false
-  args.state.cpu_one_move_timer ||= 0
-  args.state.cpu_one_move_direction ||= 0
-  args.state.cpu_one_attack_warning_timer ||= 0
-  args.state.cpu_one_attack_warning_timer_started ||= false
-  args.state.player_one_fist_right_timer||= 0
-  args.state.player_one_fist_right_timer_started ||= false
-  args.state.player_one_fist_right_forward ||= 0
-  args.state.player_one_fist_right_backward ||= 0
-  args.state.player_one_fist_left_timer ||= 0
-  args.state.player_one_fist_left_timer_started ||= false
-  args.state.player_one_fist_left_forward ||= 0
-  args.state.player_one_fist_left_backward ||= 0
-  args.state.cpu_one_fist_right_timer ||= 0
-  args.state.cpu_one_fist_right_timer_started ||= false
-  args.state.cpu_one_fist_right_forward ||= 0
-  args.state.cpu_one_fist_right_backward ||= 0
-  args.state.cpu_one_fist_left_timer ||= 0
-  args.state.cpu_one_fist_left_timer_started ||= false
-  args.state.cpu_one_fist_left_forward ||= 0
-  args.state.cpu_one_fist_left_backward ||= 0
+  args.state.player_one_enabled ||= false
+  args.state.player_two_enabled ||= false
+  args.state.cpu_one_enabled ||= false
 end
 
 def reset_defaults args
+  #Player one
+
   args.state.player_one[:x] = 400
   args.state.player_one[:y] = 300
   args.state.player_one[:dx] = 0
@@ -48,6 +76,55 @@ def reset_defaults args
   args.state.player_one[:cooldown] = 0
   args.state.player_one[:hits_taken] = 0
   args.state.player_one[:health] = 100
+  args.state.player_one_fist_right[:x] = 432
+  args.state.player_one_fist_right[:y] = 300
+  args.state.player_one_fist_right[:dx] = 0
+  args.state.player_one_fist_right[:dy] = 0
+  args.state.player_one_fist_left[:x] = 432
+  args.state.player_one_fist_left[:y] = 332
+  args.state.player_one_fist_left[:dx] = 0
+  args.state.player_one_fist_left[:dy] = 0
+  args.state.player_one_health_bar[:w] = 500
+  args.state.player_one_health_bar[:x] = 30
+  args.state.player_one_fist_right_timer= 0
+  args.state.player_one_fist_right_timer_started = false
+  args.state.player_one_fist_right_forward = 0
+  args.state.player_one_fist_right_backward = 0
+  args.state.player_one_fist_left_timer = 0
+  args.state.player_one_fist_left_timer_started = false
+  args.state.player_one_fist_left_forward = 0
+  args.state.player_one_fist_left_backward = 0
+
+  # Player two
+
+  args.state.player_two[:x] = 800
+  args.state.player_two[:y] = 300
+  args.state.player_two[:dx] = 0
+  args.state.player_two[:dy] = 0
+  args.state.player_two[:cooldown] = 0
+  args.state.player_two[:hits_taken] = 0
+  args.state.player_two[:health] = 100
+  args.state.player_two_fist_right[:x] = 800
+  args.state.player_two_fist_right[:y] = 300
+  args.state.player_two_fist_right[:dx] = 0
+  args.state.player_two_fist_right[:dy] = 0
+  args.state.player_two_fist_left[:x] = 800
+  args.state.player_two_fist_left[:y] = 332
+  args.state.player_two_fist_left[:dx] = 0
+  args.state.player_two_fist_left[:dy] = 0
+  args.state.player_two_health_bar[:w] = 500
+  args.state.player_two_health_bar[:x] = 750
+  args.state.player_two_fist_right_timer= 0
+  args.state.player_two_fist_right_timer_started = false
+  args.state.player_two_fist_right_forward = 0
+  args.state.player_two_fist_right_backward = 0
+  args.state.player_two_fist_left_timer = 0
+  args.state.player_two_fist_left_timer_started = false
+  args.state.player_two_fist_left_forward = 0
+  args.state.player_two_fist_left_backward = 0
+
+  # CPU one
+
   args.state.cpu_one[:x] = 800
   args.state.cpu_one[:y] = 300
   args.state.cpu_one[:dx] = 0
@@ -58,23 +135,6 @@ def reset_defaults args
   args.state.cpu_one_attack_zone[:y] = 236
   args.state.cpu_one_attack_zone[:dx] = 0
   args.state.cpu_one_attack_zone[:dy] = 0
-  args.state.time_seconds = 0
-  args.state.time_minutes = 0
-  args.state.time_frame = 0
-  args.state.match_timer = 20
-  args.state.match_time_out = false
-  args.state.match_ko = false
-  args.state.cpu_one_move_timer = 0
-  args.state.cpu_one_move_direction = 0
-  args.state.player_one_fist_right[:x] = 432
-  args.state.player_one_fist_right[:y] = 300
-  args.state.player_one_fist_right[:dx] = 0
-  args.state.player_one_fist_right[:dy] = 0
-  args.state.player_one_fist_left[:x] = 432
-  args.state.player_one_fist_left[:y] = 332
-  args.state.player_one_fist_left[:dx] = 0
-  args.state.player_one_fist_left[:dy] = 0
-  args.state.player_one_health_bar[:w] = 500
   args.state.cpu_one_fist_right[:x] = 800
   args.state.cpu_one_fist_right[:y] = 300
   args.state.cpu_one_fist_right[:dx] = 0
@@ -89,14 +149,6 @@ def reset_defaults args
   args.state.cpu_one_fist_left[:cooldown] = 0
   args.state.cpu_one_health_bar[:w] = 500
   args.state.cpu_one_health_bar[:x] = 750
-  args.state.player_one_fist_right_timer= 0
-  args.state.player_one_fist_right_timer_started = false
-  args.state.player_one_fist_right_forward = 0
-  args.state.player_one_fist_right_backward = 0
-  args.state.player_one_fist_left_timer = 0
-  args.state.player_one_fist_left_timer_started = false
-  args.state.player_one_fist_left_forward = 0
-  args.state.player_one_fist_left_backward = 0
   args.state.cpu_one_fist_right_timer = 0
   args.state.cpu_one_fist_right_timer_started = false
   args.state.cpu_one_fist_right_forward = 0
@@ -105,4 +157,18 @@ def reset_defaults args
   args.state.cpu_one_fist_left_timer_started = false
   args.state.cpu_one_fist_left_forward = 0
   args.state.cpu_one_fist_left_backward = 0
+  args.state.cpu_one_move_timer = 0
+  args.state.cpu_one_move_direction = 0
+
+  # Other variables
+
+  args.state.time_seconds = 0
+  args.state.time_minutes = 0
+  args.state.time_frame = 0
+  args.state.match_timer = 20
+  args.state.match_time_out = false
+  args.state.match_ko = false
+  args.state.player_one_enabled = false
+  args.state.player_two_enabled = false
+  args.state.cpu_one_enabled = false
 end

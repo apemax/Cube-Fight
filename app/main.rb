@@ -1,5 +1,6 @@
 require 'app/defaults.rb'
 require 'app/player_one_input.rb'
+require 'app/player_two_input.rb'
 require 'app/cpu_one_input.rb'
 require 'app/collision_detection.rb'
 
@@ -41,9 +42,10 @@ end
 
 def tick_menu_scene args
   args.state.menu_option_player_vs_cpu ||= {x: 180, y: 416, w: 384, h: 64}
-  args.state.menu_option_how_to_play ||= {x: 180, y: 316, w: 384, h: 64}
-  args.state.menu_option_options ||= {x: 180, y: 216, w: 384, h: 64}
-  args.state.menu_option_exit ||= {x: 180, y: 116, w: 384, h: 64}
+  args.state.menu_option_player_one_vs_player_two ||= {x: 180, y: 316, w: 384, h: 64}
+  args.state.menu_option_how_to_play ||= {x: 180, y: 216, w: 384, h: 64}
+  args.state.menu_option_options ||= {x: 180, y: 116, w: 384, h: 64}
+  args.state.menu_option_exit ||= {x: 180, y: 16, w: 384, h: 64}
   args.state.menu_option_outline ||= [x: 1300, y: 800, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
   args.state.menu_option_main ||= 1
   args.state.menu_option_cooldown ||= 0
@@ -67,47 +69,64 @@ def tick_menu_scene args
   if args.inputs.mouse.intersect_rect?(args.state.menu_option_player_vs_cpu)
     args.state.menu_option_main = 1
   end
-  if args.inputs.mouse.intersect_rect?(args.state.menu_option_how_to_play)
+  if args.inputs.mouse.intersect_rect?(args.state.menu_option_player_one_vs_player_two)
     args.state.menu_option_main = 2
   end
-  if args.inputs.mouse.intersect_rect?(args.state.menu_option_options)
+  if args.inputs.mouse.intersect_rect?(args.state.menu_option_how_to_play)
     args.state.menu_option_main = 3
   end
-  if args.inputs.mouse.intersect_rect?(args.state.menu_option_exit)
+  if args.inputs.mouse.intersect_rect?(args.state.menu_option_options)
     args.state.menu_option_main = 4
+  end
+  if args.inputs.mouse.intersect_rect?(args.state.menu_option_exit)
+    args.state.menu_option_main = 5
   end
 
   args.outputs.background_color = [255, 255, 255]
   args.outputs.labels << {x: 180, y: 620, text: "20 Second Cube Fight", size_enum: 40, a: 255, r: 0, g: 0, b: 0}
   args.outputs.labels << {x: 180, y: 480, text: "Player VS CPU", size_enum: 20, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 180, y: 380, text: "How to Play", size_enum: 20, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 180, y: 280, text: "Options", size_enum: 20, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 180, y: 180, text: "Exit", size_enum: 20, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 180, y: 380, text: "Player VS Player", size_enum: 20, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 180, y: 280, text: "How to Play", size_enum: 20, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 180, y: 180, text: "Options", size_enum: 20, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 180, y: 80, text: "Exit", size_enum: 20, a: 255, r: 0, g: 0, b: 0}
   args.outputs.primitives << args.state.menu_option_outline
 
   if args.state.menu_option_main == 1
     args.state.menu_option_outline = [x: 180, y: 416, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
     if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
+      args.state.player_one_enabled = true
+      args.state.player_two_enabled = false
+      args.state.cpu_one_enabled = true
       args.state.next_scene = :game_scene
       args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
     end
   end
   if args.state.menu_option_main == 2
     args.state.menu_option_outline = [x: 180, y: 316, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a and args.state.menu_option_click_cooldown <= 0
-      args.state.next_scene = :how_to_play_scene
-      args.state.menu_option_click_cooldown += 10
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
+      args.state.player_one_enabled = true
+      args.state.player_two_enabled = true
+      args.state.cpu_one_enabled = false
+      args.state.next_scene = :game_scene
+      args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
     end
   end
   if args.state.menu_option_main == 3
     args.state.menu_option_outline = [x: 180, y: 216, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
     if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a and args.state.menu_option_click_cooldown <= 0
-      args.state.next_scene = :options_scene
+      args.state.next_scene = :how_to_play_scene
       args.state.menu_option_click_cooldown += 10
     end
   end
   if args.state.menu_option_main == 4
     args.state.menu_option_outline = [x: 180, y: 116, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a and args.state.menu_option_click_cooldown <= 0
+      args.state.next_scene = :options_scene
+      args.state.menu_option_click_cooldown += 10
+    end
+  end
+  if args.state.menu_option_main == 5
+    args.state.menu_option_outline = [x: 180, y: 16, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
     if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
       GTK.request_quit
     end
@@ -239,66 +258,109 @@ def tick_game_scene args
     debug args
   end
 
-  if args.state.player_one_fist_left[:cooldown] > 0
-    args.state.player_one_fist_left[:cooldown] -= 1
-  end
-  if args.state.player_one_fist_right[:cooldown] > 0
-    args.state.player_one_fist_right[:cooldown] -= 1
+  if args.state.player_one_enabled == true
+    if args.state.player_one_fist_left[:cooldown] > 0
+      args.state.player_one_fist_left[:cooldown] -= 1
+    end
+    if args.state.player_one_fist_right[:cooldown] > 0
+      args.state.player_one_fist_right[:cooldown] -= 1
+    end
+
+    if args.state.player_one[:cooldown] > 0
+      args.state.player_one[:cooldown] -= 1
+    end
+
+    player_one_input args
   end
 
-  if args.state.player_one[:cooldown] > 0
-    args.state.player_one[:cooldown] -= 1
+  if args.state.player_two_enabled == true
+    if args.state.player_two_fist_left[:cooldown] > 0
+      args.state.player_two_fist_left[:cooldown] -= 1
+    end
+    if args.state.player_two_fist_right[:cooldown] > 0
+      args.state.player_two_fist_right[:cooldown] -= 1
+    end
+
+    if args.state.player_two[:cooldown] > 0
+      args.state.player_two[:cooldown] -= 1
+    end
+
+    player_two_input args
   end
 
-  if args.state.cpu_one_fist_left[:cooldown] > 0
-    args.state.cpu_one_fist_left[:cooldown] -= 1
-  end
+  if args.state.cpu_one_enabled == true
+    if args.state.cpu_one_fist_left[:cooldown] > 0
+      args.state.cpu_one_fist_left[:cooldown] -= 1
+    end
 
-  if args.state.cpu_one_fist_right[:cooldown] > 0
-    args.state.cpu_one_fist_right[:cooldown] -= 1
-  end
+    if args.state.cpu_one_fist_right[:cooldown] > 0
+      args.state.cpu_one_fist_right[:cooldown] -= 1
+    end
 
-  if args.state.cpu_one_fist_left[:hit_cooldown] > 0
-    args.state.cpu_one_fist_left[:hit_cooldown] -= 1
-  end
-  if args.state.cpu_one_fist_right[:hit_cooldown] > 0
-    args.state.cpu_one_fist_right[:hit_cooldown] -= 1
-  end
+    if args.state.cpu_one_fist_left[:hit_cooldown] > 0
+      args.state.cpu_one_fist_left[:hit_cooldown] -= 1
+    end
+    if args.state.cpu_one_fist_right[:hit_cooldown] > 0
+      args.state.cpu_one_fist_right[:hit_cooldown] -= 1
+    end
 
-  player_one_input args
-
-  cpu_one_input args
+    cpu_one_input args
+  end
 
   update_hit_effects args
 
   collision_detection args
 
   args.outputs.background_color = [255, 255, 255]
-  if args.state.cpu_attack_warning == true
+  if args.state.cpu_attack_warning == true and args.state.cpu_one_enabled == true
     args.outputs.primitives << args.state.cpu_one_attack_zone
   end
-  args.outputs.primitives << args.state.player_one
-  args.outputs.primitives << args.state.player_one_health_bar
-  args.outputs.primitives << args.state.cpu_one
-  args.outputs.primitives << args.state.cpu_one_health_bar
-  args.outputs.primitives << args.state.player_one_fist_right
-  args.outputs.primitives << args.state.player_one_fist_left
-  args.outputs.primitives << args.state.cpu_one_fist_left
-  args.outputs.primitives << args.state.cpu_one_fist_right
+  if args.state.player_one_enabled == true
+    args.outputs.primitives << args.state.player_one
+    args.outputs.primitives << args.state.player_one_health_bar
+    args.outputs.primitives << args.state.player_one_fist_right
+    args.outputs.primitives << args.state.player_one_fist_left
+  end
+  if args.state.player_two_enabled == true
+    args.outputs.primitives << args.state.player_two
+    args.outputs.primitives << args.state.player_two_health_bar
+    args.outputs.primitives << args.state.player_two_fist_right
+    args.outputs.primitives << args.state.player_two_fist_left
+  end
+  if args.state.cpu_one_enabled == true
+    args.outputs.primitives << args.state.cpu_one
+    args.outputs.primitives << args.state.cpu_one_health_bar
+    args.outputs.primitives << args.state.cpu_one_fist_left
+    args.outputs.primitives << args.state.cpu_one_fist_right
+  end
   args.outputs.primitives << args.state.hit_effects
   args.outputs.primitives << args.state.health_bar_outline_right
   args.outputs.primitives << args.state.health_bar_outline_left
-  args.outputs.labels << {x: 50, y: 660, text: "Player One", size_enum: 5, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 1050, y: 660, text: "CPU One", size_enum: 5, a: 255, r: 0, g: 0, b: 0}
+  if args.state.player_one_enabled == true
+    args.outputs.labels << {x: 50, y: 660, text: "Player One", size_enum: 5, a: 255, r: 0, g: 0, b: 0}
+  end
+   if args.state.player_two_enabled == true
+    args.outputs.labels << {x: 1050, y: 660, text: "Player Two", size_enum: 5, a: 255, r: 0, g: 0, b: 0}
+  end
+  if args.state.cpu_one_enabled == true
+    args.outputs.labels << {x: 1050, y: 660, text: "CPU One", size_enum: 5, a: 255, r: 0, g: 0, b: 0}
+  end
   args.outputs.labels << {x: 560, y: 700, text: "Time: #{(args.state.match_timer)}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
 
   if args.state.match_timer <= 0
     args.state.match_time_out = true
     args.state.next_scene = :game_over_scene
   end
-  if args.state.player_one[:health] <= 0 or args.state.cpu_one[:health] <= 0
-    args.state.match_ko = true
-    args.state.next_scene = :game_over_scene
+  if args.state.player_one_enabled == true and args.state.cpu_one_enabled == true
+    if args.state.player_one[:health] <= 0 or args.state.cpu_one[:health] <= 0
+      args.state.match_ko = true
+      args.state.next_scene = :game_over_scene
+    end
+  elsif args.state.player_one_enabled == true and args.state.player_two_enabled == true
+    if args.state.player_one[:health] <= 0 or args.state.player_two[:health] <= 0
+      args.state.match_ko = true
+      args.state.next_scene = :game_over_scene
+    end
   end
 end
 
@@ -334,46 +396,102 @@ def tick_game_over_scene args
 
   if args.state.match_time_out == true
     args.outputs.labels << {x: 550, y: 600, text: "Times up!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 510, y: 500, text: "Player VS CPU", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+
+    if args.state.player_one_enabled == true and args.state.cpu_one_enabled == true
+      args.outputs.labels << {x: 510, y: 500, text: "Player One VS CPU One", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+    if args.state.player_one_enabled == true and args.state.player_two_enabled == true
+      args.outputs.labels << {x: 510, y: 500, text: "Player One VS Player Two", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+
     args.outputs.labels << {x: 250, y: 450, text: "Hits taken:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 550, y: 450, text: "#{(args.state.player_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 710, y: 450, text: "#{(args.state.cpu_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+
+    if args.state.player_one_enabled == true
+      args.outputs.labels << {x: 580, y: 450, text: "#{(args.state.player_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      args.outputs.labels << {x: 580, y: 400, text: "#{(args.state.player_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+    if args.state.player_two_enabled == true
+      args.outputs.labels << {x: 840, y: 450, text: "#{(args.state.player_two[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      args.outputs.labels << {x: 840, y: 400, text: "#{(args.state.player_two[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+
+    if args.state.cpu_one_enabled == true
+      args.outputs.labels << {x: 820, y: 450, text: "#{(args.state.cpu_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      args.outputs.labels << {x: 820, y: 400, text: "#{(args.state.cpu_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+
     args.outputs.labels << {x: 231, y: 400, text: "Health left:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 550, y: 400, text: "#{(args.state.player_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 710, y: 400, text: "#{(args.state.cpu_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
 
-    if args.state.cpu_one[:health] < args.state.player_one[:health]
-      args.outputs.labels << {x: 500, y: 300, text: "Player Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    end
-    if args.state.player_one[:health] < args.state.cpu_one[:health]
-      args.outputs.labels << {x: 540, y: 300, text: "CPU Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    end
-    if args.state.cpu_one[:health] == args.state.player_one[:health]
-      args.outputs.labels << {x: 500, y: 300, text: "Tie!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    if args.state.player_one_enabled == true and args.state.cpu_one_enabled == true
+      if args.state.cpu_one[:health] < args.state.player_one[:health]
+        args.outputs.labels << {x: 500, y: 300, text: "Player Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      end
+      if args.state.player_one[:health] < args.state.cpu_one[:health]
+        args.outputs.labels << {x: 540, y: 300, text: "CPU Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      end
+      if args.state.cpu_one[:health] == args.state.player_one[:health]
+        args.outputs.labels << {x: 500, y: 300, text: "Tie!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      end
     end
 
+    if args.state.player_one_enabled == true and args.state.player_two_enabled == true
+      if args.state.player_two[:health] < args.state.player_one[:health]
+        args.outputs.labels << {x: 500, y: 300, text: "Player One Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      end
+      if args.state.player_one[:health] < args.state.player_two[:health]
+        args.outputs.labels << {x: 540, y: 300, text: "Player Two Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      end
+      if args.state.player_two[:health] == args.state.player_one[:health]
+        args.outputs.labels << {x: 500, y: 300, text: "Tie!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      end
+    end
     args.outputs.labels << {x: 180, y: 150, text: "Play again.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
     args.outputs.labels << {x: 500, y: 150, text: "Main Menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   end
 
   if args.state.match_ko == true
     args.outputs.labels << {x: 600, y: 600, text: "KO!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 510, y: 500, text: "Player VS CPU", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    if args.state.player_one_enabled == true and args.state.cpu_one_enabled == true
+      args.outputs.labels << {x: 510, y: 500, text: "Player One VS CPU One", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    elsif args.state.player_one_enabled == true and args.state.player_two_enabled == true
+      args.outputs.labels << {x: 510, y: 500, text: "Player One VS Player Two", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+    
     args.outputs.labels << {x: 250, y: 450, text: "Hits taken:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 550, y: 450, text: "#{(args.state.player_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 710, y: 450, text: "#{(args.state.cpu_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 231, y: 400, text: "Health left:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 550, y: 400, text: "#{(args.state.player_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 710, y: 400, text: "#{(args.state.cpu_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
 
-    if args.state.cpu_one[:health] <= 0
-      args.outputs.labels << {x: 500, y: 300, text: "Player Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    if args.state.player_one_enabled == true
+      args.outputs.labels << {x: 580, y: 450, text: "#{(args.state.player_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      args.outputs.labels << {x: 580, y: 400, text: "#{(args.state.player_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
     end
-    if args.state.player_one[:health] <= 0
-      args.outputs.labels << {x: 540, y: 300, text: "CPU Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    if args.state.player_two_enabled == true
+      args.outputs.labels << {x: 840, y: 450, text: "#{(args.state.player_two[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      args.outputs.labels << {x: 840, y: 400, text: "#{(args.state.player_two[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
     end
-    if args.state.cpu_one[:health] == args.state.player_one[:health]
-      args.outputs.labels << {x: 500, y: 300, text: "Tie!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+
+    if args.state.cpu_one_enabled == true
+      args.outputs.labels << {x: 820, y: 450, text: "#{(args.state.cpu_one[:hits_taken])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      args.outputs.labels << {x: 820, y: 400, text: "#{(args.state.cpu_one[:health])}", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    end
+    args.outputs.labels << {x: 231, y: 400, text: "Health left:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+
+    if args.state.player_one_enabled == true and args.state.player_two_enabled == true
+      if args.state.player_one[:health] <= 0
+        args.outputs.labels << {x: 500, y: 300, text: "Player Two Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      elsif args.state.player_two[:health] <= 0
+        args.outputs.labels << {x: 500, y: 300, text: "Player One Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      elsif args.state.player_one[:health] == args.state.player_two[:health]
+        args.outputs.labels << {x: 500, y: 300, text: "Tie!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      end
+    end
+
+    if args.state.player_one_enabled == true and args.state.cpu_one_enabled == true
+      if args.state.player_one[:health] <= 0
+        args.outputs.labels << {x: 500, y: 300, text: "CPU One Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      elsif args.state.cpu_one[:health] <= 0
+        args.outputs.labels << {x: 500, y: 300, text: "Player One Wins!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      elsif args.state.cpu_one[:health] == args.state.player_one[:health]
+        args.outputs.labels << {x: 500, y: 300, text: "Tie!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+      end
     end
 
     args.outputs.labels << {x: 180, y: 150, text: "Play again.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
@@ -387,7 +505,16 @@ def tick_game_over_scene args
     if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
       args.state.next_scene = :game_scene
       args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
-      reset_defaults args
+      if args.state.player_one_enabled == true and args.state.cpu_one_enabled == true
+        reset_defaults args
+        args.state.player_one_enabled = true
+        args.state.cpu_one_enabled = true
+      end
+      if args.state.player_one_enabled == true and args.state.player_two_enabled == true
+        reset_defaults args
+        args.state.player_one_enabled = true
+        args.state.player_two_enabled = true
+      end
     end
   end
   if args.state.menu_option_game_over == 2
@@ -419,11 +546,14 @@ end
 
 def debug args
   args.outputs.debug << args.gtk.framerate_diagnostics_primitives
-  args.outputs.labels << [x: 10, y: 80, text: "player_one cooldown: #{(args.state.player_one[:cooldown])}", size_enum: 3, a: 255, r: 0, g: 0, b: 0]
-  args.outputs.labels << [x: 10, y: 110, text: "player_one dx: #{(args.state.player_one[:dx])}", size_enum: 3, a: 255, r: 0, g: 0, b: 0]
-  args.outputs.labels << [x: 10, y: 140, text: "player_one dy: #{(args.state.player_one[:dy])}", size_enum: 3, a: 255, r: 0, g: 0, b: 0]
-  args.outputs.labels << [x: 10, y: 170, text: "player_one fist dy: #{(args.state.player_one_fist_right[:dx])}", size_enum: 3, a: 255, r: 0, g: 0, b: 0]
-  args.outputs.labels << [x: 10, y: 200, text: "cpu one fist_right dx: #{(args.state.cpu_one_fist_right[:dx])}", size_enum: 3, a: 255, r: 0, g: 0, b: 0]
-  args.outputs.labels << [x: 10, y: 230, text: "cpu one fist_right timer: #{(args.state.cpu_one_fist_right_timer_started)}", size_enum: 3, a: 255, r: 0, g: 0, b: 0]
-  args.outputs.labels << [x: 10, y: 260, text: "cpu_attack_warning: #{(args.state.cpu_attack_warning)}", size_enum: 3, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 30, text: "player_one cooldown: #{(args.state.player_one[:cooldown])}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 55, text: "player_one dx: #{(args.state.player_one[:dx])}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 80, text: "player_one dy: #{(args.state.player_one[:dy])}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 105, text: "player_one fist dy: #{(args.state.player_one_fist_right[:dx])}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 130, text: "cpu one fist_right dx: #{(args.state.cpu_one_fist_right[:dx])}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 155, text: "cpu one fist_right timer: #{(args.state.cpu_one_fist_right_timer_started)}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 180, text: "cpu_attack_warning: #{(args.state.cpu_attack_warning)}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 205, text: "cpu_one_enabled: #{(args.state.cpu_one_enabled)}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 230, text: "player_one_enabled: #{(args.state.player_one_enabled)}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
+  args.outputs.labels << [x: 10, y: 255, text: "player_two_enabled: #{(args.state.player_two_enabled)}", size_enum: 1, a: 255, r: 0, g: 0, b: 0]
 end

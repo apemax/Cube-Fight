@@ -93,22 +93,24 @@ def tick_menu_scene args
 
   if args.state.menu_option_main == 1
     args.state.menu_option_outline = [x: 180, y: 416, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a  and args.state.menu_option_click_cooldown <= 0
       args.state.player_one_enabled = true
       args.state.player_two_enabled = false
       args.state.cpu_one_enabled = true
       args.state.next_scene = :game_scene
       args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
+      args.state.menu_option_click_cooldown += 10
     end
   end
   if args.state.menu_option_main == 2
     args.state.menu_option_outline = [x: 180, y: 316, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a  and args.state.menu_option_click_cooldown <= 0
       args.state.player_one_enabled = true
       args.state.player_two_enabled = true
       args.state.cpu_one_enabled = false
       args.state.next_scene = :game_scene
       args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
+      args.state.menu_option_click_cooldown += 10
     end
   end
   if args.state.menu_option_main == 3
@@ -142,13 +144,17 @@ def tick_how_to_play_scene args
   end
 
   args.outputs.background_color = [255, 255, 255]
-  args.outputs.labels << {x: 180, y: 620, text: "20 Second Cube Fight", size_enum: 40, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 520, y: 500, text: "Controls:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 150, y: 450, text: "w, s, a, d or arrow keys = Move up, down, left, right.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 350, y: 400, text: "k, l = Punch with each fist.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 200, y: 350, text: "space = Dodge in the direction you are moving.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 450, y: 250, text: "Hit your opponent.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-  args.outputs.labels << {x: 450, y: 200, text: "Avoid getting hit.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 460, y: 680, text: "Controls:", size_enum: 30, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 520, y: 570, text: "Player One:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 330, y: 500, text: "w, s, a, d or Left Analog Stick, DPad = Movement", size_enum: 3, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 410, y: 450, text: "g, h or X, Y = Punch with each fist.", size_enum: 3, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 500, y: 400, text: "space or L1 = Dodge", size_enum: 3, a: 255, r: 0, g: 0, b: 0}
+
+  args.outputs.labels << {x: 520, y: 350, text: "Player Two:", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 330, y: 280, text: "Arrow keys or Left Analog Stick, DPad = Movement", size_enum: 3, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 410, y: 230, text: "[, ] or X, Y = Punch with each fist.", size_enum: 3, a: 255, r: 0, g: 0, b: 0}
+  args.outputs.labels << {x: 470, y: 180, text: "Right Shift or L1 = Dodge", size_enum: 3, a: 255, r: 0, g: 0, b: 0}
+  
   args.outputs.labels << {x: 450, y: 100, text: "Back to main menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   args.outputs.primitives << args.state.back_to_menu_button_outline
 
@@ -371,6 +377,10 @@ def tick_game_over_scene args
   args.state.menu_option_game_over ||= 1
   args.state.menu_option_cooldown ||= 0
 
+  if args.state.menu_option_click_cooldown > 0
+    args.state.menu_option_click_cooldown -= 1
+  end
+
   if args.inputs.left and args.state.menu_option_cooldown <= 0 and args.state.menu_option_game_over >= 2
     args.state.menu_option_cooldown += 10
     args.state.menu_option_game_over -= 1
@@ -502,7 +512,7 @@ def tick_game_over_scene args
 
   if args.state.menu_option_game_over == 1
     args.state.back_to_menu_button_outline = [x: 160, y: 96, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a and args.state.menu_option_click_cooldown <= 0
       args.state.next_scene = :game_scene
       args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
       if args.state.player_one_enabled == true and args.state.cpu_one_enabled == true
@@ -515,13 +525,15 @@ def tick_game_over_scene args
         args.state.player_one_enabled = true
         args.state.player_two_enabled = true
       end
+      args.state.menu_option_click_cooldown += 10
     end
   end
   if args.state.menu_option_game_over == 2
     args.state.back_to_menu_button_outline = [x: 480, y: 96, w: 256, h: 64, path: 'sprites/menu-option-outline.png']
-    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a
+    if args.inputs.keyboard.enter or args.inputs.mouse.click or args.inputs.controller_one.key_down.a and args.state.menu_option_click_cooldown <= 0
       args.state.next_scene = :menu_scene
       reset_defaults args
+      args.state.menu_option_click_cooldown += 10
     end
   end
 end

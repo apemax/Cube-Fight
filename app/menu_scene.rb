@@ -12,7 +12,7 @@ def tick_menu_scene args
     args.state.menu_option_cooldown += 10
     args.state.menu_option_main -= 1
   end
-  if args.inputs.down and args.state.menu_option_cooldown <= 0 and args.state.menu_option_main <= 3
+  if args.inputs.down and args.state.menu_option_cooldown <= 0 and args.state.menu_option_main <= 4
     args.state.menu_option_cooldown += 10
     args.state.menu_option_main += 1
   end

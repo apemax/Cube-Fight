@@ -21,7 +21,7 @@ def player_two_input args
       args.state.player_two_fist_right[:dy] += 15
       args.state.player_two_fist_left[:dy] += 15
     end
-    args.audio[:dodge] = {input: "sounds/foley_rope_spin_in_air_like_lasso_3.mp3", gain: 0.2}
+    args.audio[:dodge] = {input: "sounds/foley_rope_spin_in_air_like_lasso_3.mp3", gain: args.state.audio_volume}
     args.state.player_two[:cooldown] += 15
   end
 
@@ -160,7 +160,7 @@ def player_two_input args
         args.state.player_one_health_bar[:x] += 50
         args.state.player_two_fist_right[:cooldown] += 15
         args.state.hit_effects << {x: args.state.player_two_fist_right[:x] + 32, y: args.state.player_two_fist_right[:y] + 8, w: 32, h: 32, path: 'sprites/hit-effect-0.png', age: 0}
-        args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: 0.2}
+        args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: args.state.audio_volume}
       end
     end
 
@@ -196,7 +196,7 @@ def player_two_input args
         args.state.player_one_health_bar[:x] += 50
         args.state.player_two_fist_left[:cooldown] += 15
         args.state.hit_effects << {x: args.state.player_two_fist_left[:x] + 32, y: args.state.player_two_fist_left[:y] + 8, w: 32, h: 32, path: 'sprites/hit-effect-0.png', age: 0}
-        args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: 0.2}
+        args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: args.state.audio_volume}
       end
     end
 

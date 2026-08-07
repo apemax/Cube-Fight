@@ -56,7 +56,7 @@ def tick_menu_scene args
       args.state.player_two_enabled = false
       args.state.cpu_one_enabled = true
       args.state.next_scene = :game_scene
-      args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
+      args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: args.state.audio_volume}
       args.state.menu_option_click_cooldown += 10
     end
   end
@@ -67,7 +67,7 @@ def tick_menu_scene args
       args.state.player_two_enabled = true
       args.state.cpu_one_enabled = false
       args.state.next_scene = :game_scene
-      args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: 0.2}
+      args.audio[:starting_bell] = {input: "sounds/blastwave_fx_boxingbellring_s08sp.136.mp3", gain: args.state.audio_volume}
       args.state.menu_option_click_cooldown += 10
     end
   end

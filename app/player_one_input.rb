@@ -21,7 +21,7 @@ def player_one_input args
       args.state.player_one_fist_right[:dy] += 15
       args.state.player_one_fist_left[:dy] += 15
     end
-    args.audio[:dodge] = {input: "sounds/foley_rope_spin_in_air_like_lasso_3.mp3", gain: 0.2}
+    args.audio[:dodge] = {input: "sounds/foley_rope_spin_in_air_like_lasso_3.mp3", gain: args.state.audio_volume}
     args.state.player_one[:cooldown] += 15
   end
 
@@ -161,7 +161,7 @@ def player_one_input args
           args.state.cpu_one_health_bar[:x] += 50
           args.state.player_one_fist_right[:cooldown] += 15
           args.state.hit_effects << {x: args.state.player_one_fist_right[:x] + 32, y: args.state.player_one_fist_right[:y] + 8, w: 32, h: 32, path: 'sprites/hit-effect-0.png', age: 0}
-          args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: 0.2}
+          args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: args.state.audio_volume}
         end
       elsif args.state.player_one_enabled == true and args.state.player_two_enabled == true
         if args.state.player_two.intersect_rect? args.state.player_one_fist_right and args.state.player_one_fist_right[:cooldown] <= 0 and !args.state.player_two.intersect_rect? args.state.player_one
@@ -171,7 +171,7 @@ def player_one_input args
           args.state.player_two_health_bar[:x] += 50
           args.state.player_one_fist_right[:cooldown] += 15
           args.state.hit_effects << {x: args.state.player_one_fist_right[:x] + 32, y: args.state.player_one_fist_right[:y] + 8, w: 32, h: 32, path: 'sprites/hit-effect-0.png', age: 0}
-          args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: 0.2}
+          args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: args.state.audio_volume}
         end
       end
     end
@@ -210,7 +210,7 @@ def player_one_input args
           args.state.cpu_one_health_bar[:x] += 50
           args.state.player_one_fist_left[:cooldown] += 15
           args.state.hit_effects << {x: args.state.player_one_fist_left[:x] + 32, y: args.state.player_one_fist_left[:y] + 8, w: 32, h: 32, path: 'sprites/hit-effect-0.png', age: 0}
-          args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: 0.2}
+          args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: args.state.audio_volume}
         end
       elsif args.state.player_one_enabled == true and args.state.player_two_enabled == true
         if args.state.player_two.intersect_rect? args.state.player_one_fist_left and args.state.player_one_fist_left[:cooldown] <= 0 and !args.state.player_two.intersect_rect? args.state.player_one
@@ -220,7 +220,7 @@ def player_one_input args
           args.state.player_two_health_bar[:x] += 50
           args.state.player_one_fist_left[:cooldown] += 15
           args.state.hit_effects << {x: args.state.player_one_fist_left[:x] + 32, y: args.state.player_one_fist_left[:y] + 8, w: 32, h: 32, path: 'sprites/hit-effect-0.png', age: 0}
-          args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: 0.2}
+          args.audio[:hit] = {input: "sounds/pm_rockimpt_source_rock_impact_big_lfe_7_pmsfx_ri2_3951.mp3", gain: args.state.audio_volume}
         end
       end
     end

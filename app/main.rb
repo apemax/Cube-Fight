@@ -14,6 +14,7 @@ def boot args
   args.state = {}
   args.state.cpu_attack_warning ||= true
   args.state.menu_option_click_cooldown ||= 0
+  args.state.audio_volume ||= 0.2
 end
 
 def tick args

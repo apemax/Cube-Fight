@@ -83,8 +83,8 @@ def tick_game_over_scene args
         args.outputs.labels << {x: 500, y: 300, text: "Tie!", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
       end
     end
-    args.outputs.labels << {x: 180, y: 150, text: "Play again.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 500, y: 150, text: "Main Menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 180, y: 150, text: "Play again", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 500, y: 150, text: "Main Menu", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   end
 
   if args.state.match_ko == true
@@ -132,8 +132,8 @@ def tick_game_over_scene args
       end
     end
 
-    args.outputs.labels << {x: 180, y: 150, text: "Play again.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
-    args.outputs.labels << {x: 500, y: 150, text: "Main Menu.", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 180, y: 150, text: "Play again", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
+    args.outputs.labels << {x: 500, y: 150, text: "Main Menu", size_enum: 10, a: 255, r: 0, g: 0, b: 0}
   end
 
   args.outputs.primitives << args.state.back_to_menu_button_outline

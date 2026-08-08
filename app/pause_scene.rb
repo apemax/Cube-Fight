@@ -3,7 +3,7 @@ def tick_pause_scene args
 
   args.outputs.background_color = [255, 255, 255]
 
-  if args.inputs.keyboard.key_down.p or args.inputs.controller_one.key_down.start
+  if args.inputs.keyboard.key_down.p or args.inputs.controller_one.key_down.start or args.inputs.controller_two.key_down.start
     args.state.next_scene = :game_scene
   end
 end

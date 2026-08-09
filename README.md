@@ -2,9 +2,11 @@
 
 Cube Fight was made for the 20 Million Second Game Jam: https://itch.io/jam/20ms-game-jam
 
-In Cube Fight to aim is to get as many hits on your opponent while avoiding getting hit yourself.
+Cube Fight is a fairly simple fighting game, Try to get your opponents health bar down to zero while avoiding getting hit.
 
-Play it on Itch.io here:
+Play it on Itch.io here: https://apemax.itch.io/cube-fight
+
+Cube Fight is a further development of 20 Second Cube Fight: https://apemax.itch.io/20-second-cube-fight
 
 Made with the DragonRuby Game Toolkit: https://dragonruby.org/
 

@@ -1,5 +1,5 @@
 def tick_game_over_scene args
-  args.state.back_to_menu_button ||= {x: 500, y: 96, w: 384, h: 64}
+  args.state.game_over_back_to_menu_button ||= {x: 500, y: 96, w: 384, h: 64}
   args.state.play_again_button ||= {x: 180, y: 96, w: 384, h: 64}
   args.state.back_to_menu_button_outline ||= [x: 1300, y: 800, w: 384, h: 64, path: 'sprites/menu-option-outline.png']
   args.state.menu_option_game_over ||= 1
@@ -25,7 +25,7 @@ def tick_game_over_scene args
   if args.inputs.mouse.intersect_rect?(args.state.play_again_button)
     args.state.menu_option_game_over = 1
   end
-  if args.inputs.mouse.intersect_rect?(args.state.back_to_menu_button)
+  if args.inputs.mouse.intersect_rect?(args.state.game_over_back_to_menu_button)
     args.state.menu_option_game_over = 2
   end
 

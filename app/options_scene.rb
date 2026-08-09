@@ -3,7 +3,7 @@ def tick_options_scene args
   args.state.audio_volume_option ||= {x: 180, y: 446, w: 384, h: 64}
   args.state.audio_volume_up_button ||= {x: 690, y: 446, w: 64, h: 64}
   args.state.audio_volume_down_button ||= {x: 580, y: 446, w: 64, h: 64}
-  args.state.back_to_menu_button ||= {x: 180, y: 96, w: 384, h: 64}
+  args.state.options_menu_back_to_menu_button ||= {x: 180, y: 96, w: 384, h: 64}
   args.state.button_outline ||= [x: 1300, y: 800, w: 384, h: 64, path: 'sprites/menu-option-outline.png']
   args.state.audio_volume_button_outline ||= [x: 1300, y: 800, w: 64, h: 64, path: 'sprites/menu-option-outline.png']
   args.state.menu_option ||= 1
@@ -32,7 +32,7 @@ def tick_options_scene args
   if args.inputs.mouse.intersect_rect?(args.state.audio_volume_option)
     args.state.menu_option = 2
   end
-  if args.inputs.mouse.intersect_rect?(args.state.back_to_menu_button)
+  if args.inputs.mouse.intersect_rect?(args.state.options_menu_back_to_menu_button)
     args.state.menu_option = 3
   end
 
